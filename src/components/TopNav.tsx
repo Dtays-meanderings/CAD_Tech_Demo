@@ -1,15 +1,14 @@
 import React from 'react';
 import { Settings, User, Download, Upload } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
-// import { exportToDXF } from '../lib/dxf-export';
-// import { importFromDXF } from '../lib/dxf-import';
+import { exportToDXF } from '../lib/dxf-export';
+import { importFromDXF } from '../lib/dxf-import';
 
 export const TopNav: React.FC = () => {
   const { model, addObjects } = useSettings() as any; // Using cast to prevent strict context undefined lookup blocking if context wraps heavily
 
   const handleExport = () => {
-    // exportToDXF(model);
-    console.warn('DXF Export not implemented');
+    exportToDXF(model);
   };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,12 +19,11 @@ export const TopNav: React.FC = () => {
       const text = event.target?.result as string;
       if (text) {
         try {
-          // const objects = importFromDXF(text);
-          // if (objects.length > 0) {
-          //   addObjects(objects);
-          //   alert(`Successfully imported ${objects.length} CAD entities directly into the solver AST.`);
-          // }
-          console.warn('DXF Import not implemented');
+          const objects = importFromDXF(text);
+          if (objects.length > 0) {
+            addObjects(objects);
+            alert(`Successfully imported ${objects.length} CAD entities directly into the solver AST.`);
+          }
         } catch (err: any) {
           alert('Error importing DXF constraints: ' + err.message);
         }
