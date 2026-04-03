@@ -1,0 +1,32 @@
+name: Build CAD App
+on:
+  push:
+    branches: [ "master", "main" ]
+  workflow_dispatch: # Allows you to manually trigger the build
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        working-directory: ./public_html/cadapp
+        run: npm install
+
+      - name: Build Vite App
+        working-directory: ./public_html/cadapp
+        run: npm run build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cadapp-deployment-ready
+          path: ./public_html/cadapp/dist/
